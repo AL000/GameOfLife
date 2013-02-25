@@ -3,7 +3,7 @@
 #include <iostream>
 
 const int bounds = 50;
-const float scale = 5;
+const float scale = 10;
 
 typedef std::array<bool, bounds> Row;
 typedef std::array<Row, bounds> Map;
@@ -44,6 +44,15 @@ int main()
 
 				if (x > 0 && x < bounds && y > 0 && y < bounds) {
 					map[x][y] = !map[x][y];
+				}
+			}
+
+			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Right) {
+				int x = static_cast<int>(event.mouseButton.x / scale);
+				int y = static_cast<int>(event.mouseButton.y / scale);
+
+				if (x > 0 && x < bounds && y > 0 && y < bounds) {
+					std::cout << std::to_string(getAliveNeighborCount(x, y)) << " neighbors" << std::endl;
 				}
 			}
         }
@@ -103,6 +112,7 @@ int getAliveNeighborCount(int x, int y) {
 	int result = 0;
 	for (int dx = -1; dx <= 1; ++dx) {
 		for (int dy = -1; dy <= 1; ++dy) {
+			if (dx == 0 && dy == 0) continue;
 			if (x + dx < 0 || x + dx >= bounds || y + dy < 0 || y + dy >= bounds) continue;
 			if (map[x + dx][y + dy]) ++result;
 		}
