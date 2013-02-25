@@ -96,6 +96,27 @@ int main()
 			}
 		}
 
+		// gridfu explained: since each line needs two vertices, they need to placed twice as densely
+		int w = 100, h = 100;
+		sf::Color gray(64, 64, 64);
+		sf::VertexArray grid(sf::Lines, w);
+		for (int i = 0; i < w; i = i + 2) {
+			grid[i].position = sf::Vector2f(i * (scale / 2), 0);
+			grid[i].color = gray;
+			grid[i + 1].position = sf::Vector2f(i * (scale / 2), 600);
+			grid[i + 1].color = gray;
+		}
+		window.draw(grid);
+
+		for (int i = 0; i < h; i = i + 2) {
+			grid[i].position = sf::Vector2f(0, i * (scale / 2));
+			grid[i].color = gray;
+			grid[i + 1].position = sf::Vector2f(600, i * (scale / 2));
+			grid[i + 1].color = gray;
+		}
+		window.draw(grid);
+
+		// captions
 		sf::Font f;
 		f.loadFromFile("arial.ttf");
 		sf::String str = "generation " + std::to_string(generationCounter);
