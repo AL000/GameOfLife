@@ -2,7 +2,7 @@
 #include <array>
 #include <iostream>
 
-const int bounds = 50;
+const int bounds = 100;
 const float scale = 10;
 
 typedef std::array<bool, bounds> Row;
@@ -37,6 +37,8 @@ int main()
                 window.close();
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Pause)
 				running = !running;
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
+				map.fill(empty);
 
 			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
 				int x = static_cast<int>(event.mouseButton.x / scale);
