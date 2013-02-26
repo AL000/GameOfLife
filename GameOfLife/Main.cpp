@@ -13,7 +13,8 @@ int getAliveNeighborCount(int x, int y);
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Game of Life");
+    sf::RenderWindow window(sf::VideoMode(bounds * scale, bounds * scale), "Game of Life");
+	window.setFramerateLimit(60);
 
 	// init the map
 	Row empty;
@@ -23,6 +24,7 @@ int main()
 	// repeatedly used
 	const sf::Vector2f size(scale, scale);
 	const sf::Color aliveColor(255, 255, 255);
+	const sf::Color gray(64, 64, 64);
 
 	int generationCounter = 0;
 	bool running = false;
@@ -40,7 +42,7 @@ int main()
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
 				map.fill(empty);
 
-			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 				int x = static_cast<int>(event.mouseButton.x / scale);
 				int y = static_cast<int>(event.mouseButton.y / scale);
 
@@ -96,34 +98,30 @@ int main()
 			}
 		}
 
-		// gridfu explained: since each line needs two vertices, they need to placed twice as densely
-		int w = 100, h = 100;
-		sf::Color gray(64, 64, 64);
-		sf::VertexArray grid(sf::Lines, w);
-		for (int i = 0; i < w; i = i + 2) {
-			grid[i].position = sf::Vector2f(i * (scale / 2), 0);
-			grid[i].color = gray;
-			grid[i + 1].position = sf::Vector2f(i * (scale / 2), 600);
-			grid[i + 1].color = gray;
+		sf::VertexArray verticalGrid(sf::Lines, 2 * bounds);
+		sf::VertexArray horizontalGrid(sf::Lines, 2 * bounds);
+		for (int i = 0; i < 2 * bounds; ++i) {
+			if (i % 2 == 0) {
+				verticalGrid[i].position = sf::Vector2f(i * (scale / 2), 0);
+				horizontalGrid[i].position = sf::Vector2f(0, i * (scale / 2));
+			} else {
+				verticalGrid[i].position = sf::Vector2f((i - 1) * (scale / 2), scale * bounds);
+				horizontalGrid[i].position = sf::Vector2f(scale * bounds, (i - 1) * (scale / 2));
+			}
+			verticalGrid[i].color = gray;
+			horizontalGrid[i].color = gray;
 		}
-		window.draw(grid);
-
-		for (int i = 0; i < h; i = i + 2) {
-			grid[i].position = sf::Vector2f(0, i * (scale / 2));
-			grid[i].color = gray;
-			grid[i + 1].position = sf::Vector2f(600, i * (scale / 2));
-			grid[i + 1].color = gray;
-		}
-		window.draw(grid);
+		window.draw(verticalGrid);
+		window.draw(horizontalGrid);
 
 		// captions
 		sf::Font f;
 		f.loadFromFile("arial.ttf");
 		sf::String str = "generation " + std::to_string(generationCounter);
-		sf::Text s(str, f);
-		s.setPosition(700, 10);
-		s.setCharacterSize(15);
-		window.draw(s);
+		sf::Text generation(str, f);
+		generation.setPosition(700, 10);
+		generation.setCharacterSize(15);
+		window.draw(generation);
 
         window.display();
     }
