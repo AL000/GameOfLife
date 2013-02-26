@@ -2,8 +2,8 @@
 #include <array>
 #include <iostream>
 
-const int bounds = 100;
-const float scale = 10;
+const int bounds = 200;
+const float scale = 5;
 
 typedef std::array<bool, bounds> Row;
 typedef std::array<Row, bounds> Map;
@@ -37,10 +37,13 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Pause)
+			if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Pause || event.key.code == sf::Keyboard::Space))
 				running = !running;
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
 				map.fill(empty);
+				generationCounter = 0;
+				running = false;
+			}
 
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 				int x = static_cast<int>(event.mouseButton.x / scale);
@@ -119,7 +122,7 @@ int main()
 		f.loadFromFile("arial.ttf");
 		sf::String str = "generation " + std::to_string(generationCounter);
 		sf::Text generation(str, f);
-		generation.setPosition(700, 10);
+		generation.setPosition(10, 10);
 		generation.setCharacterSize(15);
 		window.draw(generation);
 
