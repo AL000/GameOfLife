@@ -1,9 +1,0 @@
-﻿Build started 25. 2. 2013 22:37:14.
-     1>Project "C:\Web\projects\GameOfLife\GameOfLife\GameOfLife.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         GameOfLife.vcxproj -> C:\Web\projects\GameOfLife\Debug\GameOfLife.exe
-     1>Done Building Project "C:\Web\projects\GameOfLife\GameOfLife\GameOfLife.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.14
